@@ -74,7 +74,7 @@ Ao finalizar a compra:
 ---
 
 ## 👥 Equipe de Desenvolvimento
-- **Integrantes:** [Adicione aqui os nomes dos autores do projeto]
+- **Integrantes:** Antônia Kiatkosi; Estevão Tarifa; Isabelle de Souza; Williane Vieira
 - **Disciplina:** Algoritmos (AGT)  
 - **Curso:** Ciência da Computação — UDESC
 
