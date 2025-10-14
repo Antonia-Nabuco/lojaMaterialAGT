@@ -2,13 +2,14 @@
 #include <string.h>
 #include "validarCpfCpnj.h"
 
-void validarCpnj(char* numero){
+void validarCpnj(char* cpf){
+    
 
 
 
 }
 
-void validarCpf(char* numero){
+void validarCpf(char* cnpj){
 
 
 
