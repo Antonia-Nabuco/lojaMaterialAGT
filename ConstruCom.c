@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include "validarCpfCpnj.h"
+
 void cadastrar(void);
 void orcamento(void);
 
@@ -53,3 +55,5 @@ void cadastrar(void) {
 void orcamento(void) {
     printf("\nFunção de orçamento em desenvolvimento...\n");
 }
+
+
