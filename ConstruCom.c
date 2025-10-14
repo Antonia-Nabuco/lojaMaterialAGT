@@ -36,15 +36,24 @@ void cadastrar(void) {
 
     if (strcmp(type, "PF") == 0 || strcmp(type, "pf") == 0) {
         printf("\nDigite o seu cpf :\n");
-        scanf("%14s", cpf);
+        scanf("%11s", cpf);
+        if (!validarCpf(cpf)){
+            printf("CPF inválido. Cadastro não realizado.\n");
+            return;
+        }
     }
     else if (strcmp(type, "PJ") == 0 || strcmp(type, "pj") == 0) {
         printf("\nDigite o nome da sua empresa :\n");
         scanf("%19s", name);
         printf("\nDigite o email da sua empresa :\n");
         scanf("%39s", email);
-        printf("\nDigite o seu CNPJ da sua empresa :\n");
+        printf("\nDigite o seu CNPJ da sua empresa (somente o numero):\n");
         scanf("%19s", cnpj);
+        if (!validarCnpj(cnpj)){
+            printf("CNPJ inválido. Cadastro não realizado.\n");
+            return;
+        }
+
     }
     else {
         printf("Desculpa, esta opção não existe\n");
