@@ -30,6 +30,10 @@ CartItem cart[MAX_CART];
 int cart_count = 0;
 float total_purchase = 0;
 
+extern char customer_type[3];
+extern char cnpj_cliente[20];
+extern float pj_discount;
+
 Product products[MAX_PRODUCTS] = {
     {1, "Cimento CP-II", "Ligante", 39.90, 50, "kg", "Votoran", "Casa do Construtor",
      "Cimento CP-II de alta qualidade, ideal para concreto, argamassa e alvenaria.",
@@ -96,24 +100,48 @@ int SelecProduct(){
            printf("Deseja adicionar este produto ao carrinho? (S/N): ");
            scanf("%s", confirm);
 
-         if (strcmp(confirm, "S") == 0 || strcmp(confirm, "s") == 0) {
-        // Adiciona ao carrinho
-          cart[cart_count].product_code = products[i].code;
-          strcpy(cart[cart_count].name, products[i].name);
-          cart[cart_count].quantity = quantity;
-          cart[cart_count].total_price = quantity * products[i].unit_price;
+        if ((strcmp(confirm, "S") == 0) || (strcmp(confirm, "s") == 0)) {
+                float unit_price = products[i].unit_price;
 
-         total_purchase += cart[cart_count].total_price;
-         cart_count++;
+                // Aplica desconto se cliente for PJ
+            if(strcmp(customer_type, "PJ") == 0) {
+               if(validarCnpj(cnpj_cliente)) {   // usar cnpj_cliente
+               unit_price *= (1 - pj_discount);
+                }   printf("\nDesconto PJ aplicado! Novo valor unitário: R$ %.2f\n", unit_price);
+            }    
 
-        printf("\nProduto adicionado ao carrinho!\n");
 
+                // Adiciona ao carrinho
+                cart[cart_count].product_code = products[i].code;
+                strcpy(cart[cart_count].name, products[i].name);
+                cart[cart_count].quantity = quantity;
+                cart[cart_count].total_price = quantity * unit_price;
+
+                total_purchase += cart[cart_count].total_price;
+                cart_count++;
+
+                printf("\nProduto adicionado ao carrinho!\n");
+                printf("Subtotal atual: R$ %.2f\n", total_purchase);
+            }
+          break;   
         }
-       printf("Subtotal atual: R$ %.2f\n", total_purchase);
-       return;
     }
      if(!found){
         printf("Código não encontrado.\n");
     }
     
+}
+
+void orcamento(void){
+    char continuar = 'S';
+    while(continuar == 'S' || continuar == 's'){
+        showProducts();
+        SelectProduct();
+
+        printf("\nDeseja adicionar outro produto? (S/N): ");
+        scanf(" %c", &continuar);
+    }
+
+    printf("\nOrçamento finalizado!\n");
+    printf("Total da compra: R$ %.2f\n", total_purchase);
 }

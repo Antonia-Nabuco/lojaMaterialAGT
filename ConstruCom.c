@@ -63,7 +63,7 @@ void cadastrar(void) {
 }
 
 void orcamento(void) {
-    printf("\nFunção de orçamento em desenvolvimento...\n");
+    printf("\nFunção de orçamento chamada!\n");
 }
 
 
