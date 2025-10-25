@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+
 //Cria o molde do produto
     typedef struct {
     int code;
