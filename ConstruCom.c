@@ -1,19 +1,20 @@
 #include <stdio.h>
 #include <string.h>
 #include "validarCpfCpnj.h"
+#include "orcamento.h"
 
 void cadastrar(void);
 void orcamento(void);
 
 int main(){
-    char opcao;  
+    char opcion;  
     printf("\nOlá seja bem vindo ! \nO sistema CONSTRUCOM é uma aplicação de orçamento e compra de materiais de construção");
     printf("\nDigite : \na) Ver Horarios \nb) Fazer orcamento de materiais\n");
-    scanf(" %c",&opcao);
-    if(opcao=='A' || opcao=='a'){
+    scanf(" %c",&opcion);
+    if(opcion=='A' || opcion=='a'){
         printf("Segue os horarios: Segunda a Sexta, das 8h às 18h\n");
     }
-    else if(opcao=='B' || opcao=='b'){
+    else if(opcion=='B' || opcion=='b'){
         cadastrar();
         orcamento();
     }
