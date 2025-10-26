@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include "validarCpfCpnj.h"
 
-void validarCpf(char* cpf){
+void validarCpf(char *cpf){
     int i, j, soma, digito1, digito2;
 
     // Remover caracteres não numéricos
@@ -61,7 +61,7 @@ void validarCpf(char* cpf){
 }
 
 
-void validarCpnj(char* cnpj){
+void validarCpnj(char *cnpj){
 
 
 

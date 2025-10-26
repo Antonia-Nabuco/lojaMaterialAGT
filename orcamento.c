@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "validarCpfCpnj.h"
 
 //Cria o molde do produto
     typedef struct {
@@ -32,36 +33,37 @@ CartItem cart[MAX_CART];
 int cart_count = 0;
 float total_purchase = 0;
 
-extern char customer_type[3];
-extern char cnpj_cliente[20];
-extern float pj_discount;
+extern char type[3];
+extern char cnpj[20];
+float pj_discount = 0.10; 
+
 
 Product products[MAX_PRODUCTS] = {
     {1, "Cimento CP-II", "Ligante", 39.90, 50, "kg", "Votoran", "Casa do Construtor",
      "Cimento CP-II de alta qualidade, ideal para concreto, argamassa e alvenaria.",
-     "01/06/2023", "01/06/2025", "C1234V", "Material de construção - Cimento"},
+     "01/06/2023", "01/06/2025", "C1234V", "Material de construcao - Cimento"},
 
-    {2, "Tijolo 6 furos", "Alvenaria", 0.90, 1, "un", "Cerâmica Alfa", "Distribuidora Rocha",
+    {2, "Tijolo 6 furos", "Alvenaria", 0.90, 1, "un", "Ceramica Alfa", "Distribuidora Rocha",
      "Tijolo 6 furos, ideal para paredes e muros.",
      "10/08/2023", "10/08/2028", "TFA1001", "Materiais de alvenaria"},
 
-    {3, "Tinta Acrílica Branco Neve", "Pintura", 450.00, 18, "litros", "Suvinil", "ConstruMais",
-     "Tinta acrílica branca, acabamento fosco, alta cobertura e durabilidade.",
+    {3, "Tinta Acrilica Branco Neve", "Pintura", 450.00, 18, "litros", "Suvinil", "ConstruMais",
+     "Tinta acrilica branca, acabamento fosco, alta cobertura e durabilidade.",
      "05/07/2023", "05/07/2026", "SN-0458", "Tintas e Revestimentos"},
 
     {4, "Pincel Tigre 3\"", "Ferramenta", 8.50, 10, "un", "Tigre", "Ferragens Ltda",
-     "Pincel com cerdas sintéticas e cabo ergonômico, ideal para pintura.",
+     "Pincel com cerdas sinteticas e cabo ergonomico, ideal para pintura.",
      "15/06/2023", "15/06/2025", "PT-302", "Ferramentas de pintura"},
 
-    {5, "Arame Recozido 18", "Fixação", 14.50, 50, "metros", "Belgo Bekaert", "Depósito Central",
+    {5, "Arame Recozido 18", "Fixacao", 14.50, 50, "metros", "Belgo Bekaert", "Deposito Central",
      "Arame recozido de 18mm, resistente e ideal para uso em construções.",
-     "02/07/2023", "02/07/2028", "AR-1850", "Ferragens e Fixações"}
+     "02/07/2023", "02/07/2028", "AR-1850", "Ferragens e Fixacoes"}
 };
 
 //mostra todos os produtos 
 void showProducts(){
-    printf("\n=== CATÁLOGO DE PRODUTOS ===\n");
-    printf("Código | Produto\n");
+    printf("\n=== CATALOGO DE PRODUTOS ===\n");
+    printf("Codigo | Produto\n");
     printf("---------------------------\n");
     for(int i = 0; i < MAX_PRODUCTS; i++){
         printf("%6d | %s\n" , products[i].code, products[i].name);
@@ -69,12 +71,12 @@ void showProducts(){
 }
 
 //Permite selecionar o produto add ao carrinho e pergunta se quer + detaalhes
-int SelecProduct(){
+int SelectProduct(){
     int code, found = 0, quantity;
     char option[5];
     char confirm[5];
 
-    printf("\nDigite o código do produto desejado: ");
+    printf("\nDigite o codigo do produto desejado: ");
     scanf("%d", &code);
 
     for(int i = 0; i < MAX_PRODUCTS;i++){
@@ -82,14 +84,14 @@ int SelecProduct(){
           found = 1;
 
          printf("\nProduto: %s", products[i].name);
-         printf("\nValor unitário: R$ %.2f", products[i].unit_price);
+         printf("\nValor unitario: R$ %.2f", products[i].unit_price);
 
           printf("Deseja ver detalhes? Digite '+' para sim ou qualquer outra tecla para continuar: ");
           scanf("%s", option);
 
           //visualizar detalhes do produto (strcmp compara duas string e = 0 é pq são iguais)
           if(strcmp(option, "+") == 0) {
-                printf("\nDescrição: %s\n", products[i].description);
+                printf("\nDescricao: %s\n", products[i].description);
                 printf("Fabricante: %s\n", products[i].manufacturer);
                 printf("Fornecedor: %s\n", products[i].supplier);
                 printf("Validade: %s\n", products[i].expiry_date);
@@ -106,10 +108,10 @@ int SelecProduct(){
                 float unit_price = products[i].unit_price;
 
                 // Aplica desconto se cliente for PJ
-            if(strcmp(customer_type, "PJ") == 0) {
-               if(validarCnpj(cnpj_cliente)) {   // usar cnpj_cliente
-               unit_price *= (1 - pj_discount);
-                }   printf("\nDesconto PJ aplicado! Novo valor unitário: R$ %.2f\n", unit_price);
+            if((strcmp(type, "PJ") == 0)||(strcmp(type,"pj") == 0)) {
+            //    if(validarCnpj(cnpj)) {   // usar cnpj_cliente
+            //    unit_price *= (1 - pj_discount);
+            //     }   printf("\nDesconto PJ aplicado! Novo valor unitário: R$ %.2f\n", unit_price);
             }    
 
 
@@ -129,7 +131,7 @@ int SelecProduct(){
         }
     }
      if(!found){
-        printf("Código não encontrado.\n");
+        printf("Codigo nao encontrado.\n");
     }
     
 }
@@ -144,6 +146,6 @@ void orcamento(void){
         scanf(" %c", &continuar);
     }
 
-    printf("\nOrçamento finalizado!\n");
+    printf("\nOrcamento finalizado!\n");
     printf("Total da compra: R$ %.2f\n", total_purchase);
 }
