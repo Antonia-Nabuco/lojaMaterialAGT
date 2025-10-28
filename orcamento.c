@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "validarCpfCpnj.h"
+#include "validarCpfCnpj.h"
 
 //Cria o molde do produto
     typedef struct {
@@ -70,7 +70,7 @@ void showProducts(){
     }
 }
 
-//Permite selecionar o produto add ao carrinho e pergunta se quer + detaalhes
+//Permite selecionar o produto add ao carrinho e pergunta se quer + detalhes
 int SelectProduct(){
     int code, found = 0, quantity;
     char option[5];
@@ -86,7 +86,7 @@ int SelectProduct(){
          printf("\nProduto: %s", products[i].name);
          printf("\nValor unitario: R$ %.2f", products[i].unit_price);
 
-          printf("Deseja ver detalhes? Digite '+' para sim ou qualquer outra tecla para continuar: ");
+          printf("\nDeseja ver detalhes? Digite '+' para sim ou qualquer outra tecla para continuar: ");
           scanf("%s", option);
 
           //visualizar detalhes do produto (strcmp compara duas string e = 0 é pq são iguais)
@@ -133,9 +133,69 @@ int SelectProduct(){
      if(!found){
         printf("Codigo nao encontrado.\n");
     }
-    
+    return 0;
 }
 
+void gerarNotaFiscal(void) {
+    printf("\n=====================================\n");
+    printf("              NOTA FISCAL            \n");
+    printf("=====================================\n");
+    printf("Tipo de cliente: %s\n", type);
+    if ((strcmp(type, "PJ") == 0) || (strcmp(type, "pj") == 0)) {
+        printf("CNPJ: %s\n", cnpj);
+    }
+    printf("\nItens:\n");
+
+    for (int i = 0; i < cart_count; i++) {
+        int code = cart[i].product_code;
+        Product *p = NULL;
+        for (int j = 0; j < MAX_PRODUCTS; j++) {
+            if (products[j].code == code) { p = &products[j]; break; }
+        }
+
+        if (p != NULL) {
+            float unit_price = p->unit_price;
+            if ((strcmp(type, "PJ") == 0) || (strcmp(type, "pj") == 0)) {
+                unit_price *= (1.0f - pj_discount); // mostra preço já com desconto PJ
+            }
+
+            printf("\n-------------------------------------\n");
+            printf("Produto: %s\n", p->name);
+            printf("Codigo: %d\n", p->code);
+            printf("Categoria: %s\n", p->category);
+            printf("Tipo: %s\n", p->type);
+            printf("Fabricante: %s\n", p->manufacturer);
+            printf("Fornecedor: %s\n", p->supplier);
+            printf("Descricao: %s\n", p->description);
+            printf("Lote: %s\n", p->lot);
+            printf("Data de fabr.: %s\n", p->manufacture_date);
+            printf("Validade: %s\n", p->expiry_date);
+            printf("Unidade: %s\n", p->unit);
+            printf("Quantidade: %d\n", cart[i].quantity);
+            printf("Preco unitario (aplicado): R$ %.2f\n", unit_price);
+            printf("Total do item: R$ %.2f\n", cart[i].quantity * unit_price);
+        } else {
+            printf("\nProduto codigo %d - detalhes nao encontrados.\n", code);
+        }
+    }
+
+    printf("\n-------------------------------------\n");
+    if ((strcmp(type, "PJ") == 0) || (strcmp(type, "pj") == 0)) {
+        float subtotal = total_purchase;
+        float desconto = subtotal * pj_discount;
+        float total_com_desconto = subtotal - desconto;
+        printf("Subtotal (sem desconto): R$ %.2f\n", subtotal);
+        printf("Desconto PJ (%.0f%%): R$ %.2f\n", pj_discount * 100.0f, desconto);
+        printf("Total a pagar: R$ %.2f\n", total_com_desconto);
+    } else {
+        printf("Total a pagar: R$ %.2f\n", total_purchase);
+    }
+    printf("=====================================\n\n");
+
+    /*printf("\nOrcamento finalizado!\n");
+    printf("Total da compra: R$ %.2f\n", total_purchase);*/
+    return;
+}
 void orcamento(void){
     char continuar = 'S';
     while(continuar == 'S' || continuar == 's'){
@@ -145,7 +205,5 @@ void orcamento(void){
         printf("\nDeseja adicionar outro produto? (S/N): ");
         scanf(" %c", &continuar);
     }
-
-    printf("\nOrcamento finalizado!\n");
-    printf("Total da compra: R$ %.2f\n", total_purchase);
-}
+    gerarNotaFiscal();
+} 

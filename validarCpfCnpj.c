@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "validarCpfCpnj.h"
+#include "validarCpfCnpj.h"
 
 void validarCpf(char *cpf){
     int i, j, soma, digito1, digito2;

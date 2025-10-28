@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include "orcamento.h"
-#include "validarCpfCpnj.h"
+#include "validarCpfCnpj.h"
 
 void cadastrar(void);
 void orcamento(void);
+void gerarNotaFiscal(void);
 
 char name[20], email[40], phone[12], cpf[15], cnpj[20], type[3];
 
