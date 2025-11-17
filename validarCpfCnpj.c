@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include "validarCpfCnpj.h"
 
-void validarCpf(char *cpf){
+int validarCpf(char *cpf){
     int i, j, soma, digito1, digito2;
 
     // Remover caracteres não numéricos
@@ -19,7 +19,7 @@ void validarCpf(char *cpf){
     // Verificar se o CPF tem 11 dígitos
     if(strlen(cpf_numerico) != 11){
         printf("CPF inválido: deve conter 11 dígitos.\n");
-        return;
+        return 0;
     }
 
     // Verificar se todos os dígitos são iguais
@@ -32,7 +32,7 @@ void validarCpf(char *cpf){
     }
     if(todos_iguais){
         printf("CPF inválido: todos os dígitos são iguais.\n");
-        return;
+        return 0;
     }
 
     // Calcular o primeiro dígito verificador
@@ -54,17 +54,68 @@ void validarCpf(char *cpf){
     // Verificar se os dígitos verificadores estão corretos
     if(digito1 == (cpf_numerico[9] - '0') && digito2 == (cpf_numerico[10] - '0')){
         printf("CPF válido.\n");
+        return 1;
     } else {
         printf("CPF inválido: dígitos verificadores incorretos.\n");
+        return 0;
     }
-
 }
 
 
-void validarCpnj(char *cnpj){
+int validarCnpj(char *cnpj) {
+    int numeros[14];
+    int i, j = 0;
+    int soma, resto, dig1, dig2;
+    int peso1[12] = {5,4,3,2,9,8,7,6,5,4,3,2};
+    int peso2[13] = {6,5,4,3,2,9,8,7,6,5,4,3,2};
 
+    // Pega só os números do CNPJ digitado
+    for (i = 0; cnpj[i] != '\0'; i++) {
+        if (isdigit(cnpj[i]) && j < 14) {
+            numeros[j++] = cnpj[i] - '0';
+        }
+    }
 
+    // Se não tiver 14 números, já está errado
+    if (j != 14) {
+        return 0;
+    }
 
+    // Calcula o primeiro dígito verificador
+    soma = 0;
+    for (i = 0; i < 12; i++) {
+        soma += numeros[i] * peso1[i];
+    }
 
+    resto = soma % 11;
+    if (resto < 2) {
+        dig1 = 0;
+    } else {
+        dig1 = 11 - resto;
+    }
+
+    // Calcula o segundo dígito verificador
+    soma = 0;
+    for (i = 0; i < 13; i++) {
+        if (i < 12) {
+            soma += numeros[i] * peso2[i];
+        } else {
+            soma += dig1 * peso2[i];
+        }
+    }
+
+    resto = soma % 11;
+    if (resto < 2) {
+        dig2 = 0;
+    } else {
+        dig2 = 11 - resto;
+    }
+
+    // Compara os dígitos calculados com os digitados
+    if (dig1 == numeros[12] && dig2 == numeros[13]) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 

@@ -17,14 +17,14 @@
     char expiry_date[12];
     char lot[20];
     char category[50];
-} Product;
+} Product; // Product: cada item disponível no catálogo da loja
 
 typedef struct {
     int product_code;
     char name[50];
     int quantity;
     float total_price;
-} CartItem;
+} CartItem; // CartItem: item adicionado ao carrinho do cliente
 
 #define MAX_PRODUCTS 5 //Cria um vetor
 #define MAX_CART 5
@@ -35,9 +35,11 @@ float total_purchase = 0;
 
 extern char type[3];
 extern char cnpj[20];
+extern char cpf[15];
+extern char name[20];
 float pj_discount = 0.10; 
 
-
+// Vetor que simula um banco de dados de produtos cadastrados
 Product products[MAX_PRODUCTS] = {
     {1, "Cimento CP-II", "Ligante", 39.90, 50, "kg", "Votoran", "Casa do Construtor",
      "Cimento CP-II de alta qualidade, ideal para concreto, argamassa e alvenaria.",
@@ -108,11 +110,14 @@ int SelectProduct(){
                 float unit_price = products[i].unit_price;
 
                 // Aplica desconto se cliente for PJ
-            if((strcmp(type, "PJ") == 0)||(strcmp(type,"pj") == 0)) {
-            //    if(validarCnpj(cnpj)) {   // usar cnpj_cliente
-            //    unit_price *= (1 - pj_discount);
-            //     }   printf("\nDesconto PJ aplicado! Novo valor unitário: R$ %.2f\n", unit_price);
-            }    
+                if((strcmp(type, "PJ") == 0) || (strcmp(type,"pj") == 0)) {
+                    if(validarCnpj(cnpj)) {
+                        unit_price *= (1 - pj_discount);
+                        printf("\nDesconto PJ aplicado! Novo valor unitário: R$ %.2f\n", unit_price);
+                    } else {
+                        printf("\nCNPJ inválido! Desconto não aplicado.\n");
+                    }
+                }    
 
 
                 // Adiciona ao carrinho
@@ -140,9 +145,12 @@ void gerarNotaFiscal(void) {
     printf("\n=====================================\n");
     printf("              NOTA FISCAL            \n");
     printf("=====================================\n");
+    printf("Nome: %s\n", name);
     printf("Tipo de cliente: %s\n", type);
     if ((strcmp(type, "PJ") == 0) || (strcmp(type, "pj") == 0)) {
         printf("CNPJ: %s\n", cnpj);
+    } else {
+        printf("CPF: %s\n", cpf);
     }
     printf("\nItens:\n");
 
@@ -192,8 +200,8 @@ void gerarNotaFiscal(void) {
     }
     printf("=====================================\n\n");
 
-    /*printf("\nOrcamento finalizado!\n");
-    printf("Total da compra: R$ %.2f\n", total_purchase);*/
+    printf("\nOrcamento finalizado!\n");
+    printf("Total da compra: R$ %.2f\n", total_purchase);
     return;
 }
 void orcamento(void){
